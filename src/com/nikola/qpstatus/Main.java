@@ -40,6 +40,12 @@ public class Main extends MyBaseActivity {
 	private Update update;
 	private TextView verzijaApp;
 
+	/**proba
+	 * edwfe
+	 * vfev
+	 * rdvef
+	 * vcsdfa*/
+	
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -60,7 +66,7 @@ public class Main extends MyBaseActivity {
 				Konstante.URL_APP, Konstante.URLV_APP, Konstante.URLH_APP);
 		verzijaApp.setText(Login.verzijaApp);
 		if (Login.azuriranje == 0) {
-			Log.d("update", "provjera");
+			Log.d("update", "verzija" + Login.verzijaApp);
 			Login.azuriranje++;
 			update.execute();
 		}
