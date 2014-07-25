@@ -1,0 +1,245 @@
+package com.nikola.qpstatus;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class Main extends MyBaseActivity {
+
+	private Context context = Main.this;
+	// private MyApp appInstance;
+	private Button button;
+	private static Intent intent = null;
+	private static String user;
+	private static String pass;
+	private EditText userInput;
+	private EditText passInput;
+	private static boolean zapamti = false;
+	private Update update;
+	private TextView verzijaApp;
+
+	public void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
+		verzijaApp = (TextView) findViewById(R.id.row_label);
+
+		PackageInfo pInfo = null;
+		try {
+			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			Login.verzijaApp = "QPStatus v" + pInfo.versionName;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int version = pInfo.versionCode;
+		update = new Update(context, Konstante.NAME_APP, version,
+				Konstante.URL_APP, Konstante.URLV_APP);
+		verzijaApp.setText(Login.verzijaApp);
+		if (Login.azuriranje == 0) {
+			Log.d("update", "provjera");
+			Login.azuriranje++;
+			update.execute();
+		}
+
+		/** Inicijalizacija OPTION */
+		SharedPreferences prefOptions = getSharedPreferences(
+				Konstante.PREFS_NAME_OPTIONS, MODE_PRIVATE);
+		Login.postoTransUp = Float.parseFloat(prefOptions.getString(
+				Konstante.PREFS_TRANS_UP, "0.7"));
+		Login.postoTransDown = Float.parseFloat(prefOptions.getString(
+				Konstante.PREFS_TRANS_DOWN, "0.3"));
+		Login.postoMediumEventsUp = Float.parseFloat(prefOptions.getString(
+				Konstante.PREFS_MEDIUM_UP, "0.7"));
+		Login.postoMediumEventsDown = Float.parseFloat(prefOptions.getString(
+				Konstante.PREFS_MEDIUM_UP, "0.3"));
+		Login.brojHighEvents = Float.parseFloat(prefOptions.getString(
+				Konstante.PREFS_HIGH, "1"));
+		Login.grad = prefOptions.getString(Konstante.PREF_GRAD, "OPATIJA");
+		/** Inicijalizacija OPTION */
+
+		SharedPreferences pref = getSharedPreferences(Konstante.PREFS_NAME,
+				MODE_PRIVATE);
+		user = pref.getString(Konstante.PREF_USERNAME, null);
+		pass = pref.getString(Konstante.PREF_PASSWORD, null);
+		zapamti = pref.getBoolean(Konstante.PREF_ZAPAMTI, false);
+
+		if (!Tools.isOnline(Main.this)) {
+			Tools.internetDialog(context, Main.this);
+		}
+
+		intent = new Intent(this, Procesing.class);
+
+		final CheckBox cb = (CheckBox) findViewById(R.id.checkBox1);
+		userInput = (EditText) findViewById(R.id.userInput);
+		passInput = (EditText) findViewById(R.id.passInput);
+
+		cb.setChecked(zapamti);
+		userInput.setText(user);
+		passInput.setText(pass);
+
+		button = (Button) findViewById(R.id.button1);
+
+		button.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View arg0) {
+				if (userInput.getText().toString().equals("admin")
+						&& passInput.getText().toString().equals("1a2s3d")) {
+					Intent intent = new Intent(Main.this, Admin.class);
+					startActivity(intent);
+				} else {
+					if (cb.isChecked()) {
+						zapamti = true;
+					} else {
+						zapamti = false;
+					}
+					user = userInput.getText().toString();
+					pass = passInput.getText().toString();
+
+					if (Tools.isOnline(Main.this) == false) {
+						Tools.internetDialog(context, Main.this);
+					} else {
+						new soapTaskLoading().execute();
+					}
+				}
+			}
+		});
+
+		obavijestNovaVerzija();
+	}
+
+	/** Thread koji se bavi logiranjem i spremanjem podataka */
+	private class soapTaskLoading extends AsyncTask<String[], Void, Void> {
+
+		private final ProgressDialog dialog = new ProgressDialog(Main.this);
+
+		protected void onPreExecute() {
+			this.dialog.setMessage("Molim pricekajte...");
+			this.dialog.show();
+		}
+
+		protected Void doInBackground(String[]... polja) {
+			Login.logiranjePre(user, pass);
+			if (zapamti) {
+				getSharedPreferences(Konstante.PREFS_NAME, MODE_PRIVATE).edit()
+						.putString(Konstante.PREF_USERNAME, user)
+						.putString(Konstante.PREF_PASSWORD, pass)
+						.putBoolean(Konstante.PREF_ZAPAMTI, zapamti).commit();
+			} else {
+				getSharedPreferences(Konstante.PREFS_NAME, MODE_PRIVATE).edit()
+						.putString(Konstante.PREF_USERNAME, null)
+						.putString(Konstante.PREF_PASSWORD, null)
+						.putBoolean(Konstante.PREF_ZAPAMTI, false).commit();
+			}
+			return null;
+		}
+
+		protected void onPostExecute(Void result) {
+			if (this.dialog.isShowing()) {
+				this.dialog.dismiss();
+			}
+			if (Login.loggedIn) {
+				new soapPrikupiPodatke().execute();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Niste ukucali dobru korisničko ime ili lozinku.",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+
+	/** Thread koji prikuplja sve podatke prije nego pozove novi aktiviti */
+	private class soapPrikupiPodatke extends AsyncTask<String[], Void, Void> {
+
+		private final ProgressDialog dialog = new ProgressDialog(Main.this);
+
+		protected void onPreExecute() {
+			this.dialog.setMessage("Molim pricekajte...");
+			this.dialog.show();
+		}
+
+		protected Void doInBackground(String[]... polja) {
+			Object test = SoapService.getMaticni(0, "", Login.grad, "");
+			Login.maticniPodaci(test.toString());
+			return null;
+		}
+
+		protected void onPostExecute(Void result) {
+			if (this.dialog.isShowing()) {
+				this.dialog.dismiss();
+			}
+			startActivity(intent);
+
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+		case R.id.izlaz:
+			this.finish();
+			break;
+		}
+		return true;
+	}
+
+	public static boolean provjera = true;
+
+	private void obavijestNovaVerzija() {
+		Thread obavijestNovaVerzija = new Thread("obavijestNovaVerzija") {
+			boolean novaVerzija = false;
+
+			@Override
+			public void run() {
+				while (provjera) {
+					try {
+						Thread.sleep(10000 * 6 * 60 * 2);
+						novaVerzija = update.verzijaAplikacije();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					if(activity != null){
+						activity.runOnUiThread(new Runnable() {
+							public void run() {
+								try {
+									if (novaVerzija) {
+										Tools.dialogUpozorenjaTest("Dostupna je nova verzija aplikacije.\n" +
+												"Izađite iz aplikacije i pokrenite ažuriranje!", activity, R.drawable.events, null);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						
+						});
+					}
+				}
+			}
+		};
+		obavijestNovaVerzija.start();
+	}
+}

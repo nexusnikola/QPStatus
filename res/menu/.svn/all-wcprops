@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/menu
+END
+main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/menu/main.xml
+END
+status_qp.xml
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/menu/status_qp.xml
+END
+activity_procesing.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/menu/activity_procesing.xml
+END
+admin.xml
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/menu/admin.xml
+END
+activity_test1.xml
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/menu/activity_test1.xml
+END
+test.xml
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/menu/test.xml
+END

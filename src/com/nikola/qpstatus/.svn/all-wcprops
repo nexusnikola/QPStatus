@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/s150/!svn/ver/7030/QPStatus/trunk/src/com/nikola/qpstatus
+END
+Admin.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/s150/!svn/ver/7172/QPStatus/trunk/src/com/nikola/qpstatus/Admin.java
+END
+Procesing.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/s150/!svn/ver/7172/QPStatus/trunk/src/com/nikola/qpstatus/Procesing.java
+END
+MyBaseActivity.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/s150/!svn/ver/7164/QPStatus/trunk/src/com/nikola/qpstatus/MyBaseActivity.java
+END
+Tools.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/s150/!svn/ver/7153/QPStatus/trunk/src/com/nikola/qpstatus/Tools.java
+END
+SoapService.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/s150/!svn/ver/7030/QPStatus/trunk/src/com/nikola/qpstatus/SoapService.java
+END
+Update.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/s150/!svn/ver/7153/QPStatus/trunk/src/com/nikola/qpstatus/Update.java
+END
+Main.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/s150/!svn/ver/7172/QPStatus/trunk/src/com/nikola/qpstatus/Main.java
+END
+Konstante.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/s150/!svn/ver/7172/QPStatus/trunk/src/com/nikola/qpstatus/Konstante.java
+END
+Login.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/s150/!svn/ver/7172/QPStatus/trunk/src/com/nikola/qpstatus/Login.java
+END
+MySSLSocketFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/s150/!svn/ver/7030/QPStatus/trunk/src/com/nikola/qpstatus/MySSLSocketFactory.java
+END
+Test.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/s150/!svn/ver/7030/QPStatus/trunk/src/com/nikola/qpstatus/Test.java
+END
+StatusQP.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/s150/!svn/ver/7030/QPStatus/trunk/src/com/nikola/qpstatus/StatusQP.java
+END

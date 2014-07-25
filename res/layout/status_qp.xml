@@ -1,0 +1,169 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StatusQP" xmlns:app="http://schemas.android.com/apk/res/com.nikola.qpstatus">
+
+    <ScrollView
+        android:id="@+id/pregledPodataka"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <RelativeLayout
+            android:id="@+id/pregled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Spinner
+                android:id="@+id/spnPregledUredaja"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" />
+
+            <TextView
+                android:id="@+id/txtPregledPodataka"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/spnPregledUredaja"
+                android:text="TextView" />
+
+            <ToggleButton
+                android:id="@+id/gornjaVrata"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/txtPregledPodataka"
+                android:paddingTop="5dp"
+                android:text="@string/vrataG"
+                android:textOff="Gornja vrata su zatvorena"
+                android:textOn="Gornja vrata su otvorena"
+                android:textSize="10sp" />
+
+            <ToggleButton
+                android:id="@+id/vrataSrednja"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/gornjaVrata"
+                android:text="ToggleButton"
+                android:textOff="Srednja vrata su zatvorena"
+                android:textOn="Srednja vrata su otvorena"
+                android:textSize="10sp" />
+
+            <ToggleButton
+                android:id="@+id/vrataDonja"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/vrataSrednja"
+                android:text="ToggleButton"
+                android:textOff="Donja vrata su zatvorena"
+                android:textOn="Donja vrata su otvorena"
+                android:textSize="10sp" />
+
+            <com.nikola.qpstatus.dataset.TextProgressBar
+                android:id="@+id/progressBarWithText"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/vrataDonja"
+                android:layout_marginTop="10dp"
+                android:maxHeight="20dp"
+                android:minHeight="20dp" />
+
+            <com.nikola.qpstatus.dataset.TextProgressBar
+                android:id="@+id/temperaturaSustava"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/progressBarWithText"
+                android:layout_marginTop="3dp"
+                android:maxHeight="20dp"
+                android:minHeight="20dp" />
+            
+            <com.nikola.qpstatus.dataset.TextProgressBar
+                android:id="@+id/temperaturaJezgre"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/temperaturaSustava"
+                android:layout_marginTop="10dp"
+                android:maxHeight="20dp"
+                android:minHeight="20dp" />
+            
+            <com.nikola.qpstatus.dataset.TextProgressBar
+                android:id="@+id/temperatura33"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/temperaturaJezgre"
+                android:layout_marginTop="10dp"
+                android:maxHeight="20dp"
+                android:minHeight="20dp" />
+            
+            <com.nikola.qpstatus.dataset.TextProgressBar
+                android:id="@+id/temperatura50"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/temperatura33"
+                android:layout_marginTop="3dp"
+                android:maxHeight="20dp"
+                android:minHeight="20dp" />
+            
+            <com.nikola.qpstatus.dataset.TextProgressBar
+                android:id="@+id/temperatura120"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/temperatura50"
+                android:layout_marginTop="3dp"
+                android:maxHeight="20dp"
+                android:minHeight="20dp" />
+            
+            <com.nikola.qpstatus.dataset.TextProgressBar
+                android:id="@+id/temperatura33sb"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/temperatura120"
+                android:layout_marginTop="10dp"
+                android:maxHeight="20dp"
+                android:minHeight="20dp" />
+            
+            <com.nikola.qpstatus.dataset.TextProgressBar
+                android:id="@+id/temperaturaBAT"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/temperatura33sb"
+                android:layout_marginTop="3dp"
+                android:maxHeight="20dp"
+                android:minHeight="20dp" />
+
+            <ImageView
+                android:id="@+id/prikazPapira"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/spnPregledUredaja"
+                android:src="@drawable/paper" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,112 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sivo"
+    android:gravity="center" >
+
+    <ImageView
+        android:id="@+id/procOnlineIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toButton"
+        android:layout_alignLeft="@+id/row_icon"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/online" />
+
+    <Button
+        android:id="@+id/eventsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/sinceButton"
+        android:layout_below="@+id/sinceButton"
+        android:background="@drawable/btn_left_pad"
+        android:drawableLeft="@drawable/events64"
+        android:paddingLeft="10dp"
+        android:text="@string/dogadaji"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/transButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/toButton"
+        android:layout_alignRight="@+id/toButton"
+        android:layout_below="@+id/toButton"
+        android:background="@drawable/btn_right_pad"
+        android:drawableRight="@drawable/transakcije64"
+        android:paddingRight="10dp"
+        android:text="@string/transakcije"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/row_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/transButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/transButton"
+        android:layout_toRightOf="@+id/toButton"
+        android:src="@drawable/report" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/verzija" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/eventsButton"
+        android:padding="10dp" />
+
+    <ListView
+        android:id="@+id/procListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView4"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/spinner1" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/procUkupnotxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/spinner1"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/spinner1"
+        android:layout_toRightOf="@+id/spinner1"
+        android:gravity="center"
+        android:text=" "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/sinceButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/btn_left_pad"
+        android:drawableLeft="@drawable/clock64"
+        android:paddingLeft="10dp"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/toButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/eventsButton"
+        android:layout_toRightOf="@+id/eventsButton"
+        android:background="@drawable/btn_right_pad"
+        android:drawableRight="@drawable/clock_rev64"
+        android:paddingRight="10dp"
+        android:textSize="14sp" />
+
+</RelativeLayout>

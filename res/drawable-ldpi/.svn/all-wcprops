@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/drawable-ldpi
+END
+ic_launcher.png
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/drawable-ldpi/ic_launcher.png
+END
+disapproved.png
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/drawable-ldpi/disapproved.png
+END
+approved.png
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/s150/!svn/ver/7030/QPStatus/trunk/res/drawable-ldpi/approved.png
+END

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">QPStatus</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Izlaz</string>
+    <string name="title_activity_main">QPStatus</string>
+    <string name="title_activity_procesing">QPStatus</string>
+    <string name="title_activity_test">QPStatus Opcije</string>
+    <string name="priod_od">Period od:\t</string>
+    <string name="priod_do"> do: </string>
+    <string name="vrijeme_od">Vrijeme od</string>
+    <string name="vrijeme_do">Vrijeme do</string>
+    <string name="dogadaji">Događaji</string>
+    <string name="transakcije">Transakcije</string>
+    <string name="verzija">QPStatus v1.06</string>
+    <string name="prijava">Prijava</string>
+    <string name="hintUser">Unesi korisničko ime</string>
+    <string name="hintPass">Unesi lozinku</string>
+    <string name="zapamti">Zapamti me</string>
+    <string name="postTrans">Postotak transakcija</string>
+    <string name="mediumRisk">Postotak srednje kritičnih događaja</string>
+    <string name="gornjaMedium">Gornja granica</string>
+    <string name="mediumDonja">Donja granica</string>
+    <string name="highRisk">Broj rizičnih događaja</string>
+    <string name="transGornja">Gornja granica</string>
+    <string name="title_activity_status_qp">QPStatus</string>
+    <string name="refresh">Osvježi</string>
+    <string name="vrataG">Gronja vrata</string>
+    <string name="title_activity_admin">QPStatus Admin</string>
+    <string name="spremi">Spremi</string>
+    <string name="odbaci">Odbaci</string>
+
+</resources>

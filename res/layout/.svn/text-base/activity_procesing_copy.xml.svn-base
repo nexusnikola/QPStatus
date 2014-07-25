@@ -1,0 +1,161 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sivo"
+    android:gravity="center" >
+
+    <TextView
+        android:id="@+id/row_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/priod_od" />
+
+    <TextView
+        android:id="@+id/sinceView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/row_label"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/sinceView"
+        android:text="@string/priod_do" />
+
+    <TextView
+        android:id="@+id/toView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textView3"
+        android:text="TextView" />
+
+    <ImageView
+        android:id="@+id/procOnlineIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toView"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/toView"
+        android:src="@drawable/online" />
+
+    <Button
+        android:id="@+id/sinceButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/row_label"
+        android:text="@string/vrijeme_od" />
+
+    <Button
+        android:id="@+id/eventsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/sinceButton"
+        android:layout_below="@+id/sinceButton"
+        android:text="@string/dogadaji" />
+
+    <Button
+        android:id="@+id/toButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sinceButton"
+        android:layout_alignBottom="@+id/sinceButton"
+        android:layout_toRightOf="@+id/sinceButton"
+        android:text="@string/vrijeme_do" />
+
+    <Button
+        android:id="@+id/transButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/toButton"
+        android:layout_alignRight="@+id/toButton"
+        android:layout_below="@+id/toButton"
+        android:text="@string/transakcije" />
+
+    <ImageView
+        android:id="@+id/row_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/transButton"
+        android:layout_alignTop="@+id/toButton"
+        android:layout_toRightOf="@+id/toButton"
+        android:src="@drawable/report" />
+    
+    <ScrollView
+        android:id="@+id/procScrolView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView3"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/spinner1" >
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+
+
+            <LinearLayout
+                android:id="@+id/LinearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+
+                <TableLayout
+                    android:id="@+id/main_table"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                </TableLayout>
+                
+                <TextView
+                    android:id="@+id/eventsCodeTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=" " />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </ScrollView>
+    
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/quickpark" />
+    <AnalogClock
+        android:id="@+id/analogClock1"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/verzija" />
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/eventsButton" />
+
+</RelativeLayout>

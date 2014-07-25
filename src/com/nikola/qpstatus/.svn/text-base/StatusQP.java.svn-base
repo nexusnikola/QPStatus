@@ -1,0 +1,352 @@
+package com.nikola.qpstatus;
+
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.joda.time.DateTime;
+import org.xml.sax.SAXException;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import com.nikola.qpstatus.dataset.DataSet;
+import com.nikola.qpstatus.dataset.TextProgressBar;
+
+public class StatusQP extends Activity {
+
+	private DataSet ds;
+	private DataSet dsVrata;
+	private int id;
+	private TextView prikazPodataka;
+	private Spinner pregledUredaja;
+	
+	private ToggleButton vrataGornja;
+	private ToggleButton vrataSrednja;
+	private ToggleButton vrataDonja;
+	
+	private TextProgressBar temperaturaCpu;
+	private TextProgressBar temperaturaSustava;
+	//naponi
+	private TextProgressBar temperatura33;
+	private TextProgressBar temperatura50;
+	private TextProgressBar temperatura120;
+	private TextProgressBar temperaturaJezgre;
+	private TextProgressBar temperatura33sb;
+	private TextProgressBar temperaturaBAT;
+
+	private ImageView papir;
+	
+	private static boolean running = true;
+	
+	private Context context;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.status_qp);
+		
+		context = this;
+		prikazPodataka = (TextView) findViewById(R.id.txtPregledPodataka);
+		pregledUredaja = (Spinner) findViewById(R.id.spnPregledUredaja);
+		vrataGornja = (ToggleButton) findViewById(R.id.gornjaVrata);
+		vrataSrednja = (ToggleButton) findViewById(R.id.vrataSrednja);
+		vrataDonja = (ToggleButton) findViewById(R.id.vrataDonja);
+		
+		papir = (ImageView) findViewById(R.id.prikazPapira);
+		
+		temperaturaCpu = (TextProgressBar) findViewById(R.id.progressBarWithText);
+		temperaturaSustava = (TextProgressBar) findViewById(R.id.temperaturaSustava);
+		temperatura33 = (TextProgressBar) findViewById(R.id.temperatura33);
+		temperatura50 = (TextProgressBar) findViewById(R.id.temperatura50);
+		temperatura120 = (TextProgressBar) findViewById(R.id.temperatura120);
+		temperaturaJezgre = (TextProgressBar) findViewById(R.id.temperaturaJezgre);
+		temperatura33sb = (TextProgressBar) findViewById(R.id.temperatura33sb);
+		temperaturaBAT = (TextProgressBar) findViewById(R.id.temperaturaBAT);
+		
+		new dohvatiPodatke().execute();
+		
+		pregledUredaja.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				try {
+					postaviVidljivo();
+					int id = pregledUredaja.getSelectedItemPosition(); 
+					postaviPodatke(id);
+				} catch (Exception e) {
+					postaviNevidljivo();
+					e.printStackTrace();
+				}
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+		
+		new Thread(new Runnable() {
+	        public void run() {
+	        	while(running){
+	        		try {
+						Thread.sleep(30000);
+					} catch (InterruptedException e) {}
+	        		id = pregledUredaja.getSelectedItemPosition();
+					//new dohvatiPodatkeBezDialoga().execute();
+	        	}
+	        }
+	    }).start();
+	}
+
+	private void postaviPodatke(int id) throws Exception {
+		vrataGornja.setClickable(false);
+		vrataSrednja.setClickable(false);
+		vrataDonja.setClickable(false);
+		
+		prikazPodataka.setText("Opis: " + ds.getElementsField(id, "Description"));
+		prikazPodataka.append("\nLokacija: " + ds.getElementsField(id, "Location"));
+		prikazPodataka.append("\nZona: " + ds.getElementsField(id, "DefaultZone"));
+		DateTime dt = new DateTime(ds.getElementsField(id, "LastAliveTime"));
+		prikazPodataka.append("\nLast Alive Time: " + dt.toString("dd.MM.yyyy HH:mm"));
+		prikazPodataka.append("\nIP: " + ds.getElementsField(id, "IP"));
+		
+		if(ds.getBooleanElementsField(id, "PaperEnd")){
+			papir.setImageResource(R.drawable.no_paper);
+		}
+		
+		vrataGornja.setChecked(dsVrata.getBooleanElementsField(id, "Upper"));
+		vrataSrednja.setChecked(dsVrata.getBooleanElementsField(id, "Mid"));
+		vrataDonja.setChecked(dsVrata.getBooleanElementsField(id, "Lower"));
+		
+		temperaturaCpu = napraviBar(temperaturaCpu, Integer.parseInt(ds.getElementsField(id, "Temperature").split(";")[0].split(",")[0]), 
+				"Temperatura procesora: " + ds.getElementsField(id, "Temperature").split(";")[0].split(",")[0] + " °C");
+		
+		temperaturaSustava = napraviBar(temperaturaSustava, Integer.parseInt(ds.getElementsField(id, "Temperature").split(";")[1].split(",")[0]), 
+				"Temperatura sustava: " + ds.getElementsField(id, "Temperature").split(";")[1].split(",")[0] + " °C");
+		
+		String temp = ds.getElementsField(id, "Voltage").split(";")[1].replace(",", ".");
+		
+		temperatura33 = napraviBarTarget(temperatura33, Double.parseDouble(temp), 3.3, 
+				"3,3V: " + ds.getElementsField(id, "Voltage").split(";")[1] + " V");
+		
+		temp = ds.getElementsField(id, "Voltage").split(";")[2].replace(",", ".");
+		
+		temperatura50 = napraviBarTarget(temperatura50, Double.parseDouble(temp), 5d, 
+				"5,0V: " + ds.getElementsField(id, "Voltage").split(";")[2] + " V");
+		
+		temp = ds.getElementsField(id, "Voltage").split(";")[3].replace(",", ".");
+		
+		temperatura120 = napraviBarTarget(temperatura120, Double.parseDouble(temp), 12d, 
+				"12,0V: " + ds.getElementsField(id, "Voltage").split(";")[3] + " V");
+		
+		temp = ds.getElementsField(id, "Voltage").split(";")[0].replace(",", ".");
+		
+		temperaturaJezgre = napraviBarMax(temperaturaJezgre, Double.parseDouble(temp), 1.6d, 
+				"Napon CPU: " + ds.getElementsField(id, "Voltage").split(";")[0] + " V");	
+		
+		temp = ds.getElementsField(id, "Voltage").split(";")[4].replace(",", ".");
+		
+		temperatura33sb = napraviBarTarget(temperatura33sb, Double.parseDouble(temp), 3.3d, 
+				"3,3V SB: " + ds.getElementsField(id, "Voltage").split(";")[4] + " V");	
+		
+		temp = ds.getElementsField(id, "Voltage").split(";")[6].replace(",", ".");
+		
+		temperaturaBAT = napraviBarTarget(temperaturaBAT, Double.parseDouble(temp), 3.1d, 
+				"Napon Baterije: " + ds.getElementsField(id, "Voltage").split(";")[6] + " V");
+		
+	}
+	
+	private void postaviNevidljivo(){
+		temperaturaCpu.setVisibility(View.GONE);
+		temperaturaSustava.setVisibility(View.GONE);
+		temperatura33.setVisibility(View.GONE);
+		temperatura50.setVisibility(View.GONE);
+		temperatura120.setVisibility(View.GONE);
+		temperaturaJezgre.setVisibility(View.GONE);
+		temperatura33sb.setVisibility(View.GONE);
+		temperaturaBAT.setVisibility(View.GONE);
+		vrataDonja.setVisibility(View.GONE);
+		vrataGornja.setVisibility(View.GONE);
+		vrataSrednja.setVisibility(View.GONE);
+	}
+	
+	private void postaviVidljivo(){
+		temperaturaCpu.setVisibility(View.VISIBLE);
+		temperaturaSustava.setVisibility(View.VISIBLE);
+		temperatura33.setVisibility(View.VISIBLE);
+		temperatura50.setVisibility(View.VISIBLE);
+		temperatura120.setVisibility(View.VISIBLE);
+		temperaturaJezgre.setVisibility(View.VISIBLE);
+		temperatura33sb.setVisibility(View.VISIBLE);
+		temperaturaBAT.setVisibility(View.VISIBLE);
+		vrataDonja.setVisibility(View.VISIBLE);
+		vrataGornja.setVisibility(View.VISIBLE);
+		vrataSrednja.setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.status_qp, menu);
+		return true;
+	}
+	
+	 @Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.osvjeziStatus:
+	       	new dohvatiPodatke().execute();
+	       	break;
+	    }
+		return true;
+	 }
+	
+	private TextProgressBar napraviBar(TextProgressBar textProgressBar, int progres, String text){
+		textProgressBar.setText(text);
+		textProgressBar.setTextSize(10);
+		final float[] roundedCorners = new float[] { 5, 5, 5, 5, 5, 5, 5, 5 };
+		ShapeDrawable pgDrawable = new ShapeDrawable(new RoundRectShape(roundedCorners, null,null));
+		if(progres < 50){
+			pgDrawable.getPaint().setColor(Color.rgb(0, 200, 0));
+			//textProgressBar.setBackgroundColor(Color.rgb(0, 200, 0));			
+		} else if(progres < 75){
+			pgDrawable.getPaint().setColor(Color.rgb(200, 200, 0));
+			//textProgressBar.setBackgroundColor(Color.rgb(200, 200, 0));			
+		} else {
+			pgDrawable.getPaint().setColor(Color.rgb(200, 0, 0));
+			//textProgressBar.setBackgroundColor(Color.rgb(200, 0, 0));				
+		}
+		pgDrawable.setAlpha(96);
+		ClipDrawable progress = new ClipDrawable(pgDrawable, Gravity.LEFT, ClipDrawable.HORIZONTAL);
+		textProgressBar.setBackgroundResource(android.R.drawable.progress_horizontal);
+		textProgressBar.setProgressDrawable(progress);
+		textProgressBar.setProgress(progres);
+		return textProgressBar;		
+	}
+	
+	private TextProgressBar napraviBarMax(TextProgressBar textProgressBar, Double progres, Double max, String text){
+		max = max * 100;
+		progres = progres * 100;
+		textProgressBar.setText(text);
+		textProgressBar.setMax(Integer.parseInt(String.valueOf(Math.round(max))));
+		textProgressBar.setTextSize(10);
+		final float[] roundedCorners = new float[] { 5, 5, 5, 5, 5, 5, 5, 5 };
+		ShapeDrawable pgDrawable = new ShapeDrawable(new RoundRectShape(roundedCorners, null,null));
+		if(progres < max*0.8){
+			pgDrawable.getPaint().setColor(Color.rgb(0, 200, 0));			
+		} else {
+			pgDrawable.getPaint().setColor(Color.rgb(200, 0, 0));				
+		}
+		pgDrawable.setAlpha(96);
+		ClipDrawable progress = new ClipDrawable(pgDrawable, Gravity.LEFT, ClipDrawable.HORIZONTAL);
+		textProgressBar.setBackgroundResource(android.R.drawable.progress_horizontal);
+		textProgressBar.setProgressDrawable(progress);
+		textProgressBar.setProgress(Integer.parseInt(String.valueOf(Math.round(progres))));
+		return textProgressBar;		
+	}
+	 
+	private TextProgressBar napraviBarTarget(TextProgressBar textProgressBar, Double progres, Double target, String text){
+		target = target * 100;
+		progres = progres * 100;
+		textProgressBar.setText(text);
+		textProgressBar.setMax(Integer.parseInt(String.valueOf(Math.round(target*1.5))));
+		textProgressBar.setTextSize(10);
+		final float[] roundedCorners = new float[] { 5, 5, 5, 5, 5, 5, 5, 5 };
+		ShapeDrawable pgDrawable = new ShapeDrawable(new RoundRectShape(roundedCorners, null,null));
+		if(progres < target * 1.03 && progres > target * 0.97){
+			pgDrawable.getPaint().setColor(Color.rgb(0, 200, 0));			
+		} else if(progres < target * 1.06 && progres > target * 0.94){
+			pgDrawable.getPaint().setColor(Color.rgb(200, 200, 0));			
+		} else {
+			pgDrawable.getPaint().setColor(Color.rgb(200, 0, 0));				
+		}
+		pgDrawable.setAlpha(96);
+		ClipDrawable progress = new ClipDrawable(pgDrawable, Gravity.LEFT, ClipDrawable.HORIZONTAL);
+		textProgressBar.setBackgroundResource(android.R.drawable.progress_horizontal);
+		textProgressBar.setProgressDrawable(progress);
+		textProgressBar.setProgress(Integer.parseInt(String.valueOf(Math.round(progres))));
+		return textProgressBar;		
+	}
+	
+	private class dohvatiPodatke extends AsyncTask<String[], Void, Void>{
+		
+	    private final ProgressDialog dialog = new ProgressDialog(StatusQP.this);
+
+	    protected void onPreExecute() {
+	            this.dialog.setMessage("Molim pricekajte...");
+	            this.dialog.show();
+	    }
+
+	    protected Void doInBackground(String[]... polja) {
+			try {
+				String temp = SoapService.getPodaci(0, "", Login.grad, "", 
+						Konstante.LIST_METHOD_NAME, Konstante.LIST_SOAP_ACTION).toString();
+				ds = new DataSet(temp, 
+						"TQuickPark");
+				dsVrata = new DataSet(temp, 
+						"DoorOpened");
+			}catch(ParserConfigurationException pce) {
+				pce.printStackTrace();
+			}catch(SAXException se) {
+				se.printStackTrace();
+			}catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+	        return null;
+	    }
+
+	    protected void onPostExecute(Void result){
+	    	pregledUredaja.setAdapter(ds.spinnerData("Name", context));
+	        if (this.dialog.isShowing()) {
+	        	this.dialog.dismiss();
+	        }
+	     }
+		
+	}
+	
+	@SuppressWarnings("unused")
+	private class dohvatiPodatkeBezDialoga extends AsyncTask<String[], Void, Void>{
+		
+	    protected void onPreExecute() {	           
+	    }
+
+	    protected Void doInBackground(String[]... polja) {
+			try {
+				String temp = SoapService.getPodaci(0, "", Login.grad, "", 
+						Konstante.LIST_METHOD_NAME, Konstante.LIST_SOAP_ACTION).toString();
+				ds = new DataSet(temp, 
+						"TQuickPark");
+				dsVrata = new DataSet(temp, 
+						"DoorOpened");
+			}catch(ParserConfigurationException pce) {
+				pce.printStackTrace();
+			}catch(SAXException se) {
+				se.printStackTrace();
+			}catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+	        return null;
+	    }
+
+	    protected void onPostExecute(Void result){
+	    	pregledUredaja.setAdapter(ds.spinnerData("Name", context));
+	    	pregledUredaja.setSelection(id);
+	    }
+	}
+	
+}
