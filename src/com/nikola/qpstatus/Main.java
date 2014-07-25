@@ -39,12 +39,6 @@ public class Main extends MyBaseActivity {
 	private static boolean zapamti = false;
 	private Update update;
 	private TextView verzijaApp;
-
-	/**proba
-	 * edwfe
-	 * vfev
-	 * rdvef
-	 * vcsdfa*/
 	
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -66,11 +60,16 @@ public class Main extends MyBaseActivity {
 				Konstante.URL_APP, Konstante.URLV_APP, Konstante.URLH_APP);
 		verzijaApp.setText(Login.verzijaApp);
 		if (Login.azuriranje == 0) {
-			Log.d("update", "verzija" + Login.verzijaApp);
+			//Log.d("update", "verzija:1234" + Login.verzijaApp);
 			Login.azuriranje++;
 			update.execute();
 		}
-
+		try {
+			Thread.sleep(2);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		/** Inicijalizacija OPTION */
 		SharedPreferences prefOptions = getSharedPreferences(
 				Konstante.PREFS_NAME_OPTIONS, MODE_PRIVATE);
